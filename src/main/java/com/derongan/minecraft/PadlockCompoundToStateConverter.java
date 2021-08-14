@@ -10,14 +10,14 @@ import java.util.UUID;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
 
-public class PadlockCompoundToStateConverter {
+class PadlockCompoundToStateConverter {
 
   private final NamespacedKey authorizedUuidsNamespacedKey;
   private final NamespacedKey uuidNamespacedKey;
   private final NamespacedKey lockFaceKey;
   private final NamespacedKey isDoubleKey;
 
-  public PadlockCompoundToStateConverter(NamespacedKey authorizedUuidsNamespacedKey,
+  PadlockCompoundToStateConverter(NamespacedKey authorizedUuidsNamespacedKey,
       NamespacedKey uuidNamespacedKey, NamespacedKey lockFaceKey,
       NamespacedKey isDoubleKey) {
     this.authorizedUuidsNamespacedKey = authorizedUuidsNamespacedKey;
@@ -26,7 +26,7 @@ public class PadlockCompoundToStateConverter {
     this.isDoubleKey = isDoubleKey;
   }
 
-  public PadlockState convert(NbtCompound bukkitRoot) {
+  PadlockState convert(NbtCompound bukkitRoot) {
     NbtList<Map<String, NbtWrapper<byte[]>>> authorizedUuidsCompound = bukkitRoot.getList(
         authorizedUuidsNamespacedKey.toString());
 

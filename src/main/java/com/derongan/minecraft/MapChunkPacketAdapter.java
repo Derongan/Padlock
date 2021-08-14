@@ -18,12 +18,9 @@ import com.comphenix.protocol.wrappers.nbt.NbtCompound;
 import com.comphenix.protocol.wrappers.nbt.NbtFactory;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
-import java.util.Optional;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Vector;
 
 class MapChunkPacketAdapter extends PacketAdapter {
 
@@ -32,7 +29,7 @@ class MapChunkPacketAdapter extends PacketAdapter {
   private final PadlockCompoundToStateConverter converter;
   private final NamespacedKey padlockKey;
 
-  public MapChunkPacketAdapter(ProtocolManager protocolManager, Plugin plugin,
+  MapChunkPacketAdapter(ProtocolManager protocolManager, Plugin plugin,
       PadlockEntityManager padlockEntityManager,
       PadlockCompoundToStateConverter converter,
       NamespacedKey padlockKey) {

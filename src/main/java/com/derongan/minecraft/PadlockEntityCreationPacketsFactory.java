@@ -19,13 +19,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-public class PadlockEntityCreationPacketsFactory {
+class PadlockEntityCreationPacketsFactory {
 
   private final ProtocolManager protocolManager;
   private final ItemStack lockItem;
 
 
-  public PadlockEntityCreationPacketsFactory(ProtocolManager protocolManager,
+  PadlockEntityCreationPacketsFactory(ProtocolManager protocolManager,
       ItemStack lockItem) {
     this.protocolManager = protocolManager;
     this.lockItem = lockItem;
@@ -35,7 +35,7 @@ public class PadlockEntityCreationPacketsFactory {
 
   }
 
-  public PadlockEntityCreationPackets create(PadlockEntity padlockEntity, Player player) {
+  PadlockEntityCreationPackets create(PadlockEntity padlockEntity, Player player) {
     PacketContainer spawnPacket = createSpawnPacket(padlockEntity.lockedBlock().toVector(),
         padlockEntity.state()
             .lockFace(), padlockEntity.entityId());

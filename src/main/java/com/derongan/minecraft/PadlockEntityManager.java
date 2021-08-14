@@ -19,7 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class PadlockEntityManager {
+class PadlockEntityManager {
 
   /**
    * Retrieve the entity counter field used to generate a unique entity ID.
@@ -35,7 +35,7 @@ public class PadlockEntityManager {
   private final PadlockEntityCreationPacketsFactory padlockPacketFactory;
   private final ProtocolManager protocolManager;
 
-  public PadlockEntityManager(PadlockEntityCreationPacketsFactory padlockPacketFactory,
+  PadlockEntityManager(PadlockEntityCreationPacketsFactory padlockPacketFactory,
       ProtocolManager protocolManager) {
     this.padlockPacketFactory = padlockPacketFactory;
     this.protocolManager = protocolManager;
@@ -49,7 +49,7 @@ public class PadlockEntityManager {
   /**
    * Loads a padlock entity on chunk load. Only sends to loading player.
    */
-  public void loadPadlock(Location location, PadlockState padlockState, Player player) {
+  void loadPadlock(Location location, PadlockState padlockState, Player player) {
     PadlockEntity entity = padlockEntityByLocation.computeIfAbsent(location,
         loc -> new PadlockEntity(entityIdSupplier.get(), location, padlockState));
     padlockEntityById.putIfAbsent(entity.entityId(), entity);
@@ -58,7 +58,7 @@ public class PadlockEntityManager {
   }
 
 
-  public void createPadlock(Location location, PadlockState padlockState) {
+  void createPadlock(Location location, PadlockState padlockState) {
     Preconditions.checkArgument(!padlockEntityByLocation.containsKey(location),
         "Padlock already exists! Cannot create new one!");
 
@@ -72,7 +72,7 @@ public class PadlockEntityManager {
         .forEach(player -> sendCreatePacket(padlock, player));
   }
 
-  public void destroyPadlock(Location location) {
+  void destroyPadlock(Location location) {
     Preconditions.checkArgument(padlockEntityByLocation.containsKey(location),
         "Padlock does not exists! Cannot remove it!");
 
@@ -85,7 +85,7 @@ public class PadlockEntityManager {
         .forEach(player -> sendRemovePacket(entityId, player));
   }
 
-  public Optional<PadlockEntity> getPadlock(int entityId) {
+  Optional<PadlockEntity> getPadlock(int entityId) {
     return Optional.ofNullable(padlockEntityById.get(entityId));
   }
 

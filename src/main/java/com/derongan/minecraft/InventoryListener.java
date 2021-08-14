@@ -2,37 +2,33 @@ package com.derongan.minecraft;
 
 import com.derongan.minecraft.pdc.PadlockPersistentDataType;
 import com.google.common.collect.ImmutableSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Chest.Type;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataHolder;
-import org.bukkit.util.Vector;
 
 public class InventoryListener implements Listener {
 
@@ -52,7 +48,9 @@ public class InventoryListener implements Listener {
   void onInventoryOpen(InventoryOpenEvent event) {
     InventoryHolder holder = event.getInventory().getHolder();
 
-    event.getPlayer();
+    if (holder instanceof DoubleChest doubleChest) {
+      holder = doubleChest.getRightSide();
+    }
 
     if (holder instanceof BlockState blockState) {
       getPadlockState(blockState).ifPresent(padlockState -> {
@@ -77,7 +75,7 @@ public class InventoryListener implements Listener {
     if (isLockItem(event.getItem())) {
 
       if (event.getClickedBlock() != null && event.getClickedBlock()
-          .getState() instanceof Container container) {
+          .getState() instanceof Container) {
 
         Optional<PadlockState> existingState = Optional.ofNullable(event.getClickedBlock())
             .map(Block::getState)
@@ -85,8 +83,8 @@ public class InventoryListener implements Listener {
 
         if (existingState.isPresent()) {
           event.getPlayer().sendMessage(String.format("This chest is already locked by %s.",
-              existingState.get().authorizedUuids().stream().map(Bukkit::getPlayer)
-                  .filter(Objects::nonNull).map(Player::getName).collect(
+              existingState.get().authorizedUuids().stream().map(Bukkit::getOfflinePlayer)
+                  .map(OfflinePlayer::getName).collect(
                       Collectors.joining())));
         } else {
           Block storingBlock = getPadlockStoringBlock(event.getClickedBlock());
@@ -217,12 +215,6 @@ public class InventoryListener implements Listener {
     }
 
     return Optional.empty();
-  }
-
-  private static Vector getChunkCoord(Location location) {
-    Chunk chunk = location.getChunk();
-
-    return new Vector(chunk.getX(), 0, chunk.getZ());
   }
 
   private boolean isLockItem(@Nullable ItemStack itemStack) {
