@@ -1,0 +1,9 @@
+name: Padlock
+version: ${plugin_version}
+author: Derongan
+main: com.derongan.minecraft.PadlockPlugin
+api-version: 1.17
+depend: [ProtocolLib]
+
+prefix: Padlock
+description: A non-intrusive chest locker
